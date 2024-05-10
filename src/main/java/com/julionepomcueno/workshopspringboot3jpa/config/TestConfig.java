@@ -1,8 +1,10 @@
 package com.julionepomcueno.workshopspringboot3jpa.config;
 
+import com.julionepomcueno.workshopspringboot3jpa.entities.Category;
 import com.julionepomcueno.workshopspringboot3jpa.entities.Order;
 import com.julionepomcueno.workshopspringboot3jpa.entities.User;
 import com.julionepomcueno.workshopspringboot3jpa.entities.enums.OrderStatus;
+import com.julionepomcueno.workshopspringboot3jpa.repositories.CategoryRepository;
 import com.julionepomcueno.workshopspringboot3jpa.repositories.OrderRepository;
 import com.julionepomcueno.workshopspringboot3jpa.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,17 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Override
     public void run(String... args) throws Exception {
+        Category category1 = new Category(null, "Electronics");
+        Category category2 = new Category(null, "Books");
+        Category category3 = new Category(null, "Computers");
+
+        categoryRepository.saveAll(Arrays.asList(category1, category2, category3));
+
         User user1 = new User(null, "Maria Brown", "maria@gmail.com", "32", "32");
         User user2 = new User(null, "Alex Green", "alex@gmail.com", "54", "55");
 
@@ -34,5 +45,6 @@ public class TestConfig implements CommandLineRunner {
         Order order3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.WAITING_PAYMENT, user1);
 
         orderRepository.saveAll(Arrays.asList(order1, order2, order3));
+
     }
 }
