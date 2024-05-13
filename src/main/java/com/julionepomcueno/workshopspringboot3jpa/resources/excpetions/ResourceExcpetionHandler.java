@@ -1,5 +1,6 @@
 package com.julionepomcueno.workshopspringboot3jpa.resources.excpetions;
 
+import com.julionepomcueno.workshopspringboot3jpa.services.exceptions.DatabaseException;
 import com.julionepomcueno.workshopspringboot3jpa.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,17 @@ public class ResourceExcpetionHandler {
     ) {
         String error = "Resource not found";
         HttpStatus status = HttpStatus.NOT_FOUND;
+        StandatError err = new StandatError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<StandatError> database(
+            DatabaseException e,
+            HttpServletRequest request
+    ) {
+        String error = "Database Error";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         StandatError err = new StandatError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
